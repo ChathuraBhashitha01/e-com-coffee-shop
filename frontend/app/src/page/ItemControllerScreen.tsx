@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import ItemTable from '../component/ItemTable';
 import ItemCreateComponent from '../component/ItemCreateComponent';
-import ItemDetails from '../component/ItemCreateComponent';
 import axios from "axios";
 
 export default function ItemControllerScreen() {

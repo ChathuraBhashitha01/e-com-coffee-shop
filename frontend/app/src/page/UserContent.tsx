@@ -9,7 +9,6 @@ export default function MainContent() {
     const [removedItem, setRemovedItem] = useState({});
 
     const selectedSubmit = (data: any) => {
-        console.log(data)
         setSelectedItem(data);
     };
 

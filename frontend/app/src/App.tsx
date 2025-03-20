@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UserLayout from './page/UserLayout';
+import AdminLayout from './page/AdminLayout';
 import LoginPage from './page/LoginPage';
 
 function App() {
@@ -11,8 +12,8 @@ function App() {
           <Routes>
               <Route path="/user/*" Component={UserLayout}/>
               <Route path="/" Component={LoginPage}/>
-              {/* <Route path="/signup" Component={Signup}/>
-              <Route path="/user/*" Component={UserLayout}/>
+              <Route path="/admin/*" Component={AdminLayout}/>
+              {/* <Route path="/user/*" Component={UserLayout}/>
               <Route path="/nav" Component={UserNavBar}/> */}
           </Routes>
       </BrowserRouter>
