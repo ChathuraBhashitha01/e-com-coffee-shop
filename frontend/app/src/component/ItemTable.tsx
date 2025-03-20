@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Table, Form ,Button ,Card  } from "react-bootstrap";
+import { Form ,Card  } from "react-bootstrap";
 import GenaricTable from './GenaricTable';
 
 interface ItemRow {
@@ -45,7 +45,7 @@ export default function OrderTable({rows,selectedRow}: Props) {
   }, [serchName,serchCategory,rows]);
 
   return (
-    <Card className=" w-[1000px] min-h-[800px] flex flex-col items-center justify-start p-4 bg-white shadow-xl rounded-lg">
+    <Card className=" w-[900px] max-h-[700px] flex flex-col items-center justify-start p-4 bg-white shadow-xl rounded-lg">
       <div className="w-[95%] h-[50px] flex flex-row justify-between items-center mb-3 gap-4">
         <Form.Select
           aria-label="Default select example"
