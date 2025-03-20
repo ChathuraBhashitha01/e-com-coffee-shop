@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UserLayout from './page/UserLayout';
+import LoginPage from './page/LoginPage';
 
 function App() {
 
@@ -8,9 +9,9 @@ function App() {
     <div>
       <BrowserRouter>
           <Routes>
-              <Route path="/*" Component={UserLayout}/>
-              {/* <Route path="/login" Component={Login}/>
-              <Route path="/signup" Component={Signup}/>
+              <Route path="/user/*" Component={UserLayout}/>
+              <Route path="/" Component={LoginPage}/>
+              {/* <Route path="/signup" Component={Signup}/>
               <Route path="/user/*" Component={UserLayout}/>
               <Route path="/nav" Component={UserNavBar}/> */}
           </Routes>
