@@ -14,17 +14,17 @@ export default function UserNavBar() {
       <div className="w-[10%] flex flex-row items-center justify-between gap-3">
         <div className="w-[100px] h-[20px] flex flex-row justify-center mr-4">
           <img src={CartIcon} className="w-[20px] mr-1" />
-          <label className="text-[15px] font-serif font-semibold flex flex-row cur"><Link to="/">ORDERS</Link></label>
+          <label className="text-[15px] font-serif font-semibold flex flex-row cur"><Link to="/admin/">ORDERS</Link></label>
         </div>
 
         <div className="w-[100px] h-[20px] flex flex-row justify-center mr-4">
           <img src={HomeIcon} className="w-[20px] mr-1" />
-          <label className="text-[15px] font-serif font-semibold flex flex-row cur"><Link to="/item">ITEMS</Link></label>
+          <label className="text-[15px] font-serif font-semibold flex flex-row cur"><Link to="/admin/item">ITEMS</Link></label>
         </div>
 
         <div className="w-[100px] h-[20px] flex flex-row justify-center mr-4">
           <img src={ProfileIcon} className="w-[20px] mr-1" />
-          <label className="text-[15px] font-serif font-semibold flex flex-row"><Link to="/user">USERS</Link></label>
+          <label className="text-[15px] font-serif font-semibold flex flex-row"><Link to="/admin/user">USERS</Link></label>
         </div>
         </div>
         <div className="w-[100px] h-[20px] flex flex-row justify-center">

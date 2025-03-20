@@ -13,8 +13,6 @@ function App() {
               <Route path="/user/*" Component={UserLayout}/>
               <Route path="/" Component={LoginPage}/>
               <Route path="/admin/*" Component={AdminLayout}/>
-              {/* <Route path="/user/*" Component={UserLayout}/>
-              <Route path="/nav" Component={UserNavBar}/> */}
           </Routes>
       </BrowserRouter>
     </div>

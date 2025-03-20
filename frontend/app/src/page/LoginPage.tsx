@@ -23,13 +23,14 @@ export default function Login() {
 
     const handleLogin=async()=>{
         try {
-            await api.get('/api/v1/user/login?email='+data.email+'&password='+data.password).then((res: {data: any}) => {
-                const response = res.data;
-               if(response.role){
-                   localStorage.setItem('token', response.token);
-                   navigate('/user');
-               }
-            });
+            // await api.get('/api/v1/user/login?email='+data.email+'&password='+data.password).then((res: {data: any}) => {
+            //     const response = res.data;
+            //    if(response.role){
+            //        localStorage.setItem('token', response.token);
+            //        navigate('/user');
+            //    }
+            // });
+            navigate('/admin/');
         }catch (error){
             console.error('Error:', error);
         }
