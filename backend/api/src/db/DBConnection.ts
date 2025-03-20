@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import logger from '../util/logger';
 
 dotenv.config();
 
@@ -11,10 +12,10 @@ const DBConnection = async (): Promise<void> => {
             throw new Error("MONGODB_URL is not defined in environment variables.");
         }
         
-        const con = await mongoose.connect(MONGODB_URL);
-        console.info(`MongoDB connected to: ${con.connection.host}`);
+        const connection = await mongoose.connect(MONGODB_URL);
+        logger.info(`MongoDB connected to: ${connection.connection.host}`);
     } catch (error) {
-        console.error("Error connecting to MongoDB cluster: ", error);
+        logger.info(`Error connecting to MongoDB cluster: ${error}`);
     }
 };
 

@@ -5,7 +5,7 @@ interface IBook extends Document {
     name: string;
     description: string;
     category: string;
-    qty: number;
+    quantity: number;
     price: number;
     picture: string;
 }
@@ -30,7 +30,7 @@ const CoffeeItemSchema: Schema = new Schema(
             required: true,
             type: String
         },
-        qty: {
+        quantity: {
             required: true,
             type: Number
         },
@@ -39,7 +39,7 @@ const CoffeeItemSchema: Schema = new Schema(
             type: Number
         },
         picture: {
-            required: true,
+            required: false,
             type: String
         },
     },
