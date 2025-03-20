@@ -7,7 +7,7 @@ import expressWinston from 'express-winston';
 import DBConnection from './db/DBConnection';
 import logger from './util/logger';
 import itemRouter from './route/ItemRoute';
-import userRouter from './route/PaymentRoute';
+import userRouter from './route/UserRoute';
 import paymentRouter from './route/PaymentRoute';
 
 DBConnection();

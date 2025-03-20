@@ -35,7 +35,7 @@ const UserController = {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      const user = await User.create({ userName, email, role, password: hashedPassword });
+      const user = await User.create({ userName:userName, email:email, role:role, password: hashedPassword });
 
       if (user) {
           res.status(201).json({message: 'User created successfully'  });
