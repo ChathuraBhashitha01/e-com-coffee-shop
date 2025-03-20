@@ -4,12 +4,12 @@ import { protect } from '../middleware/AuthMiddleware';
 
 const router = express.Router();
 
-router.get('/', itemRoutes.getAllItems);
-router.post('/',  itemRoutes.createItem);
-router.put('/:code',  itemRoutes.updateItem);
-router.delete('/:code',  itemRoutes.deleteItem);
-router.get('/find/:code', itemRoutes.findItemByCode);
-router.get('/findByName/:name', itemRoutes.findItemByName);
-router.get('/findByCategory/:category', itemRoutes.findItemsByCategory);
+router.get('/',protect, itemRoutes.getAllItems);
+router.post('/',protect,  itemRoutes.createItem);
+router.put('/:code',protect,  itemRoutes.updateItem);
+router.delete('/:code',protect,  itemRoutes.deleteItem);
+router.get('/find/:code',protect, itemRoutes.findItemByCode);
+router.get('/findByName/:name',protect, itemRoutes.findItemByName);
+router.get('/findByCategory/:category',protect, itemRoutes.findItemsByCategory);
 
 export default router;
