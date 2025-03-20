@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UserLayout from './page/UserLayout';
+import AdminLayout from './page/AdminLayout';
+import LoginPage from './page/LoginPage';
 
 function App() {
 
@@ -8,11 +10,9 @@ function App() {
     <div>
       <BrowserRouter>
           <Routes>
-              <Route path="/*" Component={UserLayout}/>
-              {/* <Route path="/login" Component={Login}/>
-              <Route path="/signup" Component={Signup}/>
               <Route path="/user/*" Component={UserLayout}/>
-              <Route path="/nav" Component={UserNavBar}/> */}
+              <Route path="/" Component={LoginPage}/>
+              <Route path="/admin/*" Component={AdminLayout}/>
           </Routes>
       </BrowserRouter>
     </div>
