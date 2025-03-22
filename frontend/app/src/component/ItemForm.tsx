@@ -89,14 +89,14 @@ export default function ItemForm({ Items ,selectedItem }: Props) {
       </Card>
 
       <div
-        className="relative bg-cover bg-center w-full h-[570px] flex flex-col justify-center items-center"
+        className="relative bg-cover bg-center w-full h-auto flex flex-col justify-center items-center"
         style={{ backgroundImage: `url(${ItemCoverImage})` }}
       >
-        <div className="min-w-[95%] max-h-[75%] overflow-hidden relative">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full h-full overflow-y-auto">
+        <div className="min-w-[95%] max-h-[75%] flex justify-center items-center">
+          <div className="w-[90%] h-full mt-10 mb-10 grid grid-cols-5 gap-4 ">
             {filteredItems?.map((item, index) => (
-              <div onClick={() => handleItemClick(item)}  >
-                  <Item key={index} name={item.name} description={"coiownhcw cnhoiwnbd nbcnwoinh incid"} price={item.price}/>
+              <div key={index} onClick={() => handleItemClick(item)}className="p-5 rounded-lg shadow-md">
+                <Item name={item.name} description={"coiownhcw cnhoiwnbd nbcnwoinh incid"} price={item.price} />
               </div>
             ))}
           </div>

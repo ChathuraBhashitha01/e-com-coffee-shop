@@ -9,7 +9,7 @@ interface ItemProps {
 
 export default function Item({ name, price, description }: ItemProps) {
   return (
-    <Card className='min-w-[210px] max-w-[210px] h-[385px] shadow-xl'>
+    <Card className='min-w-[280px] max-w-[280px] h-[385px] shadow-xl'>
       <div className=' w-[100%] h-[50px] flex flex-row items-center justify-center'>
         <img className='h-[50px]' src={Logo} alt="Logo" />
       </div>

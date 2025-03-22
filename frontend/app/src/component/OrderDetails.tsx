@@ -14,10 +14,9 @@ interface ItemRow {
 
 interface Props {
   ItemRow: any;
-  selectedRow: (row: any) => void; 
 }
 
-export default function OrderDetails({ ItemRow, selectedRow }: Props) {
+export default function OrderDetails({ ItemRow }: Props) {
   const [totalOfAllGetItem,setTotalOfAllGetItem] = useState(0);
   const [items, setItems] = useState<ItemRow[]>([]);
   const [payment,setPayment] = useState(0);
@@ -26,16 +25,6 @@ export default function OrderDetails({ ItemRow, selectedRow }: Props) {
   const handleRowClick = (row: ItemRow) => {
     setItems((prev) => prev.filter((item) => item.code !== row.code));
     setTotalOfAllGetItem(totalOfAllGetItem - row.totalOfItem) 
-
-    selectedRow({
-      code: row.code,
-      quantity: row.quantity,
-    })
-  };
-
-  const handlePaymentInput = (event: { target: { value: any } }) => {
-    const value = event.target.value;
-    setPayment(value);
   };
 
 
@@ -53,8 +42,8 @@ export default function OrderDetails({ ItemRow, selectedRow }: Props) {
 
   return (
     <Card className="w-[700px] min-h-[800px] flex flex-col justify-between items-center bg-[#452202] shadow-xl rounded-lg">
-      <div className="w-[90%] h-[10%]  bg-[#452202] flex flex-col justify-center items-center">
-        <img className=' h-[100%] ' src={Logo} />
+      <div className="w-[90%] max-h-[10%]  bg-[#452202] flex flex-col justify-center items-center">
+        <img className='w-[25%] h-[100%] ' src={Logo} />
       </div>
 
       <Card.Body className="w-[90%] max-h-[80%] flex flex-col overflow-y-auto">
@@ -77,8 +66,8 @@ export default function OrderDetails({ ItemRow, selectedRow }: Props) {
           ))}
       </Card.Body>
 
-      <div className="w-[90%] h-[10%] bg-[#452202]  flex flex-row justify-center items-center">
-        <div className="w-[50%]">
+      <div className="w-[90%] min-h-[10%] bg-[#452202]  flex flex-row justify-center items-center">
+        <div className="w-[50%] h-[100%]">
           <label className=" w-[40%] h-[10%] text-[30px] text-white font-bold">Total  : </label>
           <label className=" w-[60%] text-[30px] font-bold text-white"> Rs.{totalOfAllGetItem}/=</label>
         </div>

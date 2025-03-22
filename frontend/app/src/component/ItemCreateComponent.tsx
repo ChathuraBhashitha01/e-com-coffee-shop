@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import axios from "axios";
+import { Form ,Card ,Table ,Button } from "react-bootstrap";
 
 interface Item {
     code: string;
@@ -12,7 +13,12 @@ interface Item {
     preview: string;
 }
 
-export default function ItemCreateForm () {
+interface Props{
+    saveDetails: (row: any) => void;
+    updateDetails: (row: any) => void;
+}
+
+export default function ItemCreateForm ({saveDetails,updateDetails}:Props) {
     // const token = localStorage.getItem("token");
     const api = axios.create({ baseURL: `http://localhost:3000` });
     
@@ -21,8 +27,8 @@ export default function ItemCreateForm () {
         name: "",
         description: "",
         category: "",
-        quantity: 0,
-        price: 0,
+        quantity: '',
+        price: '',
         picture: "",
         preview: "",
     });
@@ -52,8 +58,6 @@ export default function ItemCreateForm () {
     };
 
     const handleOnClearAll= ()=>{
-
-
         setFormData(() => ({
             code: "",
             name: "",
@@ -65,101 +69,40 @@ export default function ItemCreateForm () {
             preview: "",
         }));
     }
-    const handleOnSave=async ()=>{
-        try {
-            api.post('/api/v1/coffeShop/item/',{
-                "code":formData.code,
-                "name": formData.name,
-                "description": formData.description,
-                "category": formData.category,
-                "quantity": formData.quantity,
-                "price": formData.price,
-                "picture": formData.picture
-            
-            }).then((res: {data: any}) => {
-                const response = res.data;
-                alert(response);
-                console.log(response);
-            }).catch((error: any) => {
-                console.error('Axios Error:', error);
-            });
-        }catch (error){
-            console.error('Error:', error);
-        }
+   
+    const handleSaveItem =()=>{
+        saveDetails(formData)
     }
 
-    const handleOnSearch=async ()=>{
-        try {
-            api.get('/api/v1/coffeShop/item/find/'+formData.code).then((res:{data:any})=>{
-                const jasonData=res.data;
-                setFormData(jasonData);
-
-                setFormData((prevState) => ({
-                    ...prevState,
-                    preview: jasonData.picture
-                }));
-            });
-
-        }catch (error){
-            console.error('Error:', error);
-        }
-        
-    }
-
-    const handleOnUpdate = async ()=>{
-    
-        try {
-            api.put('/api/v1/coffeShop/item/'+formData.code, {
-                "code":formData.code,
-                "name": formData.name,
-                "description": formData.description,
-                "category": formData.category,
-                "quantity": formData.quantity,
-                "price": formData.price,
-                "picture": formData.picture
-               }).then((res: { data: any }) => {
-                const response = res.data;
-                alert(response);
-                console.log(response);
-            }).catch((error: any) => {
-                console.error('Axios Error:', error);
-            });
-        } catch (error) {
-            console.error('Error:', error);
-        }
-      
-    }
-
-    const handleOnDelete = async ()=>{
-        try {
-            api.delete('/api/v1/coffeShop/item/'+formData.code).then((res)=>{});
-
-        }catch (error){
-            console.error('Error:', error);
-        }
+    const handleUpdateItem =()=>{
+        updateDetails(formData)
     }
 
     return (
-      <div className="w-[600px] min-h-[700px] p-5 border rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Item Details</h2>
-        <input type="text" placeholder="Code" name="code" value={formData.code} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <input type="number" placeholder="Price" name="price" value={formData.price} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <input type="number" placeholder="Quantity" name="quantity" value={formData.quantity} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <select name="category" value={formData.category} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded">
-            <option value="">Select Category</option>
-            <option value="coffee">Coffee</option>
-        </select>
-        <textarea placeholder="Description" name="description" value={formData.description} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" rows={3}></textarea>
-        <input type="file" onChange={handleFileChange} className="mb-3" />
-        {formData.preview && <img src={formData.preview} alt="Preview" className="w-20 h-auto" />}
-        <div className="mt-3 space-x-2">
-            <button onClick={handleOnSave} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
-            <button onClick={handleOnUpdate} className="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
-            <button onClick={handleOnDelete} className="px-4 py-2 bg-blue-500 text-white rounded">Delete</button>
-            <button onClick={handleOnSearch} className="px-4 py-2 bg-blue-500 text-white rounded">Search</button>
-            <button onClick={handleOnClearAll} className="px-4 py-2 bg-blue-500 text-white rounded">Clear</button>
+      <Card className="w-[45vw] min-h-[80vh] flex flex-col justify-center items-center bg-white shadow-xl rounded-lg">
+        <div className="w-[70%] h-[95%]">
+            <label className="text-[20px] font-serif font-semibold mb-4">Item Details</label>
+            
+            <input type="text" placeholder="Code" name="code" value={formData.code} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+            <input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+            <input type="number" placeholder="Price" name="price" value={formData.price} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+            <input type="number" placeholder="Quantity" name="quantity" value={formData.quantity} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+            <select name="category" value={formData.category} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded">
+                <option value="">Select Category</option>
+                <option value="coffee">Coffee</option>
+            </select>
+            <textarea placeholder="Description" name="description" value={formData.description} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" rows={3}></textarea>
+            <input type="file" onChange={handleFileChange} className="mb-3" />
+            <div className="max-w-[100%] max-h-[20%]">
+                {formData.preview && <img src={formData.preview} alt="Preview" className=" w-auto h-[100%]" />}
+            </div>
+
+            <div className=" w-[100%] h-[20%] flex flex-row justify-center items-center">
+                <button onClick={handleSaveItem} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+                <button onClick={handleUpdateItem} className="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+                <button onClick={handleOnClearAll} className="px-4 py-2 bg-blue-500 text-white rounded">Clear</button>
+            </div>
         </div>
-    </div>
+    </Card>
     );
 };
