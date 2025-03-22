@@ -1,64 +1,33 @@
+import axios from 'axios';
 import UserOrder from '../component/UserOrderForm';
+import { useEffect, useState } from 'react';
 
 export default function UserHomeScreen() {
-    // const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-    // const [removedItem, setRemovedItem] = useState({});
+   
+    const token = localStorage.getItem('token');
 
-    // const selectedSubmit = (data: Item) => {
-    //     console.log(data)
-    //     setSelectedItem(data);
-    // };
+    const api = axios.create({
+        baseURL:`http://localhost:3000`
+    })
 
-    // const selectedRemove = (data: Item) => {
-    //     setRemovedItem(data);
-    // };
+    const [data,setData]=useState([]);
+
+    const fetchData=async ()=>{
+        try {
+            const res=await api.get("/api/v1/coffeShop/payment/getPayment");
+            setData(res.data)
+        } catch (error){
+
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
     return (
-        <div>
-            <UserOrder data={[
-                { paymentID: "001", date: "12/03/2025", total: 1600.00,  itemsList: [
-                    {
-                        code: "001",
-                        name: "Black Coffee",
-                        price: 1200,
-                        itemCount: 2
-                    },
-                    {
-                        code: "002",
-                        name: "Black Coffee",
-                        price: 1200,
-                        itemCount: 2
-                    },
-                    {
-                        code: "002",
-                        name: "Black Coffee",
-                        price: 1200,
-                        itemCount: 2
-                    },
-                    
-                    ]},
-                    { paymentID: "001", date: "12/03/2025", total: 1600.00,  itemsList: [
-                    {
-                        code: "001",
-                        name: "Black Coffee",
-                        price: 1200,
-                        itemCount: 2
-                    },
-                    {
-                        code: "002",
-                        name: "Black Coffee",
-                        price: 1200,
-                        itemCount: 2
-                    }
-                ]},
-                { paymentID: "001", date: "12/03/2025", total: 1600.00,  itemsList: [
-                    {
-                        code: "001",
-                        name: "Black Coffee",
-                        price: 1200,
-                        itemCount: 2
-                    }
-                ]},
-            ]}/>
+        <div className='w-screen h-[90vh] flex flex-col justify-center items-center'>
+            <UserOrder data={data}/>
         </div>
     )
 }

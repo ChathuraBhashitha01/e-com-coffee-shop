@@ -1,34 +1,34 @@
+import axios from 'axios';
 import OrderDetails from '../component/OrderDetails';
 import PaymentGateWay from '../component/PaymentGateWay';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-interface Item {
-    code: string;
-    name: string;
-    category: string;
-    quantity: number;
-    price: number;
-}
+export default function UserHomeScreen() {
 
-interface Props {
-    ItemRow: any;
-    selectedRow: (row: any) => void; 
-  }
+    const token = localStorage.getItem('token');
 
-export default function UserHomeScreen({ItemRow , selectedRow}:Props) {
-    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-    const [removedItem, setRemovedItem] = useState({});
+    const api = axios.create({
+        baseURL:`http://localhost:3000`
+    })
 
-    const selectedSubmit = (data: Item) => {
-        setSelectedItem(data);
-    };
+    const [data,setData]=useState<any>({});
 
-    const selectedRemove = (data: Item) => {
-        setRemovedItem(data);
-    };
+    const fetchData=async ()=>{
+        try {
+            // const res=await api.get(`/api/v1/coffeShop/cart/find/${}/`);
+            // setData(res.data)
+        } catch (error){
+
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+   
     return (
-        <div className='w-screen h-screen flex flex-row gap-5 justify-center items-center'>
-            <OrderDetails ItemRow={ItemRow} selectedRow={selectedRow} /> 
+        <div className='w-screen h-[90vh] flex flex-row gap-5 justify-center items-center'>
+            <OrderDetails ItemRow={data.itemList} /> 
             <PaymentGateWay/>
         </div>
     )
