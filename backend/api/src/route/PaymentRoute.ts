@@ -7,5 +7,6 @@ const router = express.Router();
 router.post('/placeOrder',protect, paymentRoutes.createPayment);
 router.get('/getTotal',protect, paymentRoutes.findTotal);
 router.get('/getPayment',protect, paymentRoutes.findPayment);
+router.get('/:username',protect, paymentRoutes.findPaymentByUserName);
 
 export default router;

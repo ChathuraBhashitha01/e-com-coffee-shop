@@ -16,84 +16,117 @@ const generateToken = (id: string): string => {
 };
 
 const UserController = {
-  createUser: async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { userName, email, role, password } = req.body;
 
-      if (!userName || !email || !role || !password) {
-          res.status(400).json({ message: 'Please add all fields' });
-          return;
-      }
+    getAllUser: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = await User.find();
+            res.status(200).json(user);
+        } catch (error) {
+            next();
+        }
+    },
 
-      const userExist = await User.findOne({ email });
+    createUser: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+        const { username, name, role, password } = req.body;
 
-      if (userExist) {
-          res.status(400).json({ message: 'User already exists' });
-          return;
-      }
+        if (!username || !name || !role || !password) {
+            res.status(400).json({ message: 'Please add all fields' });
+            return;
+        }
 
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+        const userExist = await User.findOne({ userName: username });
 
-      const user = await User.create({ userName, email, role, password: hashedPassword });
+        if (userExist) {
+            res.status(400).json({ message: 'User already exists' });
+            return;
+        }
 
-      if (user) {
-          res.status(201).json({message: 'User created successfully'  });
-      } else {
-          res.status(400).json({ message: 'Invalid user data' });
-      }
-  } catch (error) {
-      next();
-  }
-  },
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-  loginUser: async (req: Request, res: Response, next: NextFunction) =>{
-    try {
-      const { email, password } = req.body;
-      
-      if (!email || !password) {
-          res.status(400).json({ message: 'Please add all fields' });
-          return;
-      }
+        const user = await User.create({ userName:username, name:name, role:role, password: hashedPassword });
 
-      const user = await User.findOne({ email });
-
-      if (!user) {
-          res.status(409).json({ message: 'User not found' });
-          return;
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (!isPasswordValid) {
-          res.status(400).json({ message: 'Invalid password' });
-          return;
-      }
-
-      res.status(200).json({
-          userName: user.userName,
-          isValidUser: true,
-          token: generateToken(user.userName.toString()),
-        });
+        if (user) {
+            res.status(201).json({
+                username: user.userName,
+                role: user.role,
+                token: generateToken(user.userName.toString()),});
+        } else {
+            res.status(400).json({ message: 'Invalid user data' });
+        }
     } catch (error) {
         next();
     }
-  },
+    },
 
-  getUser: async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const user = await User.findById(req.params.id);
 
-      if (!user) {
-          res.status(404).json({ message: 'User not found' });
-          return;
-      }
+    deleteUser: async (req: Request, res: Response, next: NextFunction) =>{
+        try {
+            const username = req.params.username;
 
-      res.status(200).json(user);
-  } catch (error) {
-      next();
-  }
-  },
+            const isItemExist = await User.findOne({userName: username})
+            if(!isItemExist){
+                res.status(404).json({message:"Item not found"});
+            }
+
+            const item = await User.findOneAndDelete();
+            if(item){
+                res.status(200).json({message:"Item removed successfully"});
+            } 
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    loginUser: async (req: Request, res: Response, next: NextFunction) =>{
+        try {
+        const  username = req.params.username;
+        const password = req.params.password;
+        
+        if (!username || !password) {
+            res.status(400).json({ message: 'Please add all fields' });
+            return;
+        }
+
+        const user = await User.findOne({ userName:username });
+
+        if (!user) {
+            res.status(409).json({ message: 'User not found' });
+            return;
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            res.status(400).json({ message: 'Invalid password' });
+            return;
+        }
+
+        res.status(200).json({
+            username: user.userName,
+            role: user.role,
+            token: generateToken(user.userName.toString()),
+            });
+        } catch (error) {
+            next();
+        }
+    },
+
+    getUser: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+        const user = await User.findById(req.params.username);
+
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+
+        res.status(200).json(user);
+        } catch (error) {
+            next();
+        }
+    },
 };
 
 export default UserController;

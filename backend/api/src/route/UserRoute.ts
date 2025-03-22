@@ -4,8 +4,10 @@ import { protect } from '../middleware/AuthMiddleware';
 
 const router = express.Router();
 
-router.post('/saveUser',protect,  User.createUser);
-router.get('/login',protect, User.loginUser);
-router.get('/getUser',protect, User.getUser);
+router.get('/', User.getAllUser);
+router.delete('/:username', User.deleteUser);
+router.post('/signin',  User.createUser);
+router.get('/login/:username/:password', User.loginUser);
+router.get('/getUser/:username', User.getUser);
 
 export default router;
