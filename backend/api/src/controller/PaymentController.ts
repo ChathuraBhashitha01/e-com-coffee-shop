@@ -51,6 +51,17 @@ const PaymentController = {
         }
     },
 
+    findPaymentByUserName: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user =req.params.username;
+            const payments = await Payment.find({userName:user});
+            res.status(200).json(payments);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Something went wrong' });
+        }
+    },
+
     findTotal: async (req: Request, res: Response, next: NextFunction) => {
         try {
             let total = 0;

@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 interface User extends Document {
     userName: string;
-    email: string;
+    name: string;
     role: string
     password: string;
 }
