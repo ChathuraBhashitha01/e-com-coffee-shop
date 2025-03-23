@@ -81,8 +81,10 @@ export default function PaymentDetails({rows,selectedRow}:Props) {
                         <tbody style={{ height: 250 }}>
                             {(8 > 0 ? filteredRows.slice(page * 8, page * 8 + 8) : filteredRows ).map((row:any) => (
                             <tr className="hover:bg-blue-100 transition" onClick={() => handleRowClick(row)}>
+                                <td className="p-3">{row.paymentID}</td>
                                 <td className="p-3">{row.userName}</td>
-                                <td className="p-3  ">{row.name}</td>
+                                <td className="p-3">{row.date}</td>
+                                <td className="p-3  ">{row.total}</td>
                                 <td className="p-3  flex flex-row justify-center items-center"><img onClick={() => handleDeleteItem(row)} className=' max-w-[30px] max-h-[30px] cursor-pointer rounded-full' src={RemoveIcon} /></td>
                             </tr>
                             ))}

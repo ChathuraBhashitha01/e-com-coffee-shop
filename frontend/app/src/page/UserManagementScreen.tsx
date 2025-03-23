@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import User from '../component/UserDetailsForm';
+import UserDetailsForm from '../component/UserDetailsForm';
 import UserTable from '../component/UserTable';
 import axios from 'axios';
 
@@ -16,7 +16,7 @@ export default function UserManagementScreen() {
 
     const selectedOrders =async (data:any)=>{
         try {
-            const res = await api.get(`/api/v1/coffeShop/cart/${data.username}`);
+            const res = await api.get(`/api/v1/coffeShop/payment/${data.userName}`);
             setUserOrder(res.data)
         } catch (error){
 
@@ -50,7 +50,7 @@ export default function UserManagementScreen() {
     <UserTable rows={data}
         selectedRow={selectedOrders}
         deletedRow={handleOnDelete}/>
-      <User data={userOrder}/>
+      <UserDetailsForm data={userOrder}/>
     </div>
   )
 }
