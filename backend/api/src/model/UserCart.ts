@@ -16,26 +16,18 @@ const UserCartchema: Schema = new Schema(
     {
         userName: {
             required: true,
-            type: String
+            type: String,
+            unique: true,
+            index: true
         },
 
         itemsList: [
-            {code: {
-                required: true,
-                type: String,
-            },
-            quantity: {
-                required: true,
-                type: Number
-            },
-            price: {
-                required: true,
-                type: Number
-            },
-            totalOfItem: {
-                required: true,
-                type: Number
-            }}
+            {
+                code: { required: true, type: String,},
+                quantity: {required: true,type: Number},
+                price: {required: true,type: Number},
+                totalOfItem: {required: true,type: Number}
+            }
         ]
     },
     { versionKey: false }
