@@ -1,7 +1,5 @@
 import express from 'express';
 import UserCart from '../controller/UserCartController';
-import { protect } from '../middleware/AuthMiddleware';
-
 const router = express.Router();
 
 router.get('/', UserCart.getAllUserCarts);

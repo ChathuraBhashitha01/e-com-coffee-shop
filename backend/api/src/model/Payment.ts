@@ -9,6 +9,7 @@ interface Item {
 
 interface Payment extends Document {
     paymentID: string;
+    userName: string;
     date: string;
     total: number;
     itemsList: Item[];
@@ -21,6 +22,10 @@ const PaymentSchema: Schema = new Schema(
             type: String,
             unique: true,
             index: true
+        },
+        userName: {
+            required: true,
+            type: String
         },
         date: {
             required: true,
