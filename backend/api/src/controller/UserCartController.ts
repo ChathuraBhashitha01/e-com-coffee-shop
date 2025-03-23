@@ -29,14 +29,13 @@ const BookController = {
 
     createUserCart: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const itemData = req.body;
+            const { userName, itemsList }  = req.body;
 
-            const isItemExist = await UserCart.findOne({userName: itemData.username})
+            const isItemExist = await UserCart.findOne({userName:userName})
             if(isItemExist){
                 res.status(409).json({error:"Item Already Exist"});
             }
-
-            const item = await UserCart.create(itemData);
+            const item = await UserCart.create({userName ,itemsList});
             if(item){
                 res.status(201).json({message:"Item created successfully"});
             } else {
