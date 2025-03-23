@@ -31,8 +31,8 @@ export default function UserHomeScreen() {
       setSelectedItem(formData);
       setIsVisibleSubmitAddingForm(true);
       await api.post('/api/v1/coffeShop/cart/',{
-        // userName: ;
-        // itemList: Item[];
+        userName: "Bhashitha",
+        itemList: selectedItem
       
     
     })

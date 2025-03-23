@@ -18,14 +18,14 @@ export default function UserOrderForm({ data }: UserOrderFormProps) {
   return (
     <div className="w-[45vw] h-[80vh] flex flex-col items-center shadow-lg overflow-y-scroll">
       {filteredRows.map((item: any, index: number) => (
-        <Card key={index} className="w-[80%] min-h-[30%] h-auto mt-4 flex flex-row">
+        <Card key={index} className="w-[80%] min-h-[30%] max-h-[30%] h-auto mt-4 flex flex-row">
             <div className="w-[20%] h-full bg-[#452202] rounded-lg flex flex-col justify-center items-center">
                 <img className=' w-[100%] ' src={Logo} />
             </div>
             <Card.Body className="w-[100%] min-h-[100%] flex flex-col justify-between">
                 <div className="w-[100%]  max-h-[50px] flex flex-row justify-between">
                     <div className=" w-auto max-w-[60%] max-h-[100%] flex flex-col">
-                        <label className=" text-[20px] font-serif font-extrabold">Chathura Bhashitha</label>
+                        <label className=" text-[20px] font-serif font-extrabold">{item.userName}</label>
                         <label className=" text-[15px] font-serif font-light">chathurabhashitha@gmail.com</label>
                     </div>
 

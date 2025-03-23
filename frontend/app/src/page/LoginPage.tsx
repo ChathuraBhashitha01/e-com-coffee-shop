@@ -25,15 +25,16 @@ export default function Login() {
         event.preventDefault(); // Prevent page reload
     
         try {
-          const response = await api.get(`/api/v1/coffeShop/user/login/${formData.username}/${formData.password}`);
+        //   const response = await api.get(`/api/v1/coffeShop/user/login/${formData.username}/${formData.password}`);
         
-          if (response.data.role === "ADMIN") {
-            localStorage.setItem("token", response.data.token);
-            navigate("/admin");
-          } else if (response.data.role === "USER") {
-            localStorage.setItem("token", response.data.token);
-            navigate("/user");
-          }
+        //   if (response.data.role === "ADMIN") {
+        //     localStorage.setItem("token", response.data.token);
+        //     navigate("/admin");
+        //   } else if (response.data.role === "USER") {
+        //     localStorage.setItem("token", response.data.token);
+        //     navigate("/user");
+        //   }
+        navigate("/user");
         } catch (error) {
           console.error("Error:", error);
         }
@@ -55,16 +56,16 @@ export default function Login() {
     return (
         <div className="h-screen w-screen flex flex-col justify-center items-center  bg-opacity-50 z-50" style={{ backgroundImage: `url(${Logo})` }}>
             <div className="w-[30%] min-h-[50%] ml-10 flex flex-col justify-evenly items-center rounded-2xl shadow-lg" >
-                    <h2 className="text-white text-center font-serif font-bold">Sign In</h2>
-                    <form className="w-[90%] min-h-[70%] flex flex-col gap-3">
+                <h2 className="text-white text-center font-serif font-bold">Sign In</h2>
+                <form className="w-[90%] min-h-[70%] flex flex-col gap-3">
 
-                        <input type="text" value={formData.username} onChange={handleInputOnChange} name='username'  placeholder="username" className=" w-[90%] h-[40px] text-white border-1 border-white rounded-xs" id='username'/>
-                        <input type="password" value={formData.password} onChange={handleInputOnChange} name='password' placeholder="password" className=" w-[90%] h-[40px] border-1 border-white  text-white rounded-xs"
-                                id='password'/>
+                    <input type="text" value={formData.username} onChange={handleInputOnChange} name='username'  placeholder="username" className=" w-[90%] h-[40px] text-white border-1 border-white rounded-xs" id='username'/>
+                    <input type="password" value={formData.password} onChange={handleInputOnChange} name='password' placeholder="password" className=" w-[90%] h-[40px] border-1 border-white  text-white rounded-xs"
+                            id='password'/>
 
-                        <button onClick={handleLogin} className="bg-slate-700  mt-10  w-[90%] h-[40px] text-white font-serif shadow-lg rounded-lg">SIGN IN</button>
-                        <button onClick={handleSignUp} className="bg-slate-700  w-[90%] h-[40px] text-white font-serif shadow-lg rounded-lg">SIGN UP</button>
-                    </form>
+                    <button onClick={handleLogin} className="bg-slate-700  mt-10  w-[90%] h-[40px] text-white font-serif shadow-lg rounded-lg">SIGN IN</button>
+                    <button onClick={handleSignUp} className="bg-slate-700  w-[90%] h-[40px] text-white font-serif shadow-lg rounded-lg">SIGN UP</button>
+                </form>
             </div>
         </div>
     );

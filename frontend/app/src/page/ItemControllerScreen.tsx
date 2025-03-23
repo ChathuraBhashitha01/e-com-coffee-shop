@@ -85,7 +85,7 @@ export default function ItemControllerScreen() {
     return (
         <div className='w-screen h-[90vh] flex flex-row justify-evenly items-center'>
             <ItemTable rows={item} selectedRow={selectedSubmit} deleteRow={handleOnDelete}/>
-            <ItemCreateComponent saveDetails={handleOnSave} updateDetails={handleOnUpdate} />
+            <ItemCreateComponent itemDetails={selectedItem} saveDetails={handleOnSave} updateDetails={handleOnUpdate} />
         </div>
     )
 }

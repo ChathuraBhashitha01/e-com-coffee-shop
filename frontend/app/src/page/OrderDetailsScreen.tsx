@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import PlaseOrderDetails from "../component/PlaceOrderDetails" 
-import UserOrder from '../component/UserOrderForm';
-import { data } from "react-router-dom";
+import ItemsOfOrders from '../component/ItemsOfOrders';
 import axios from "axios";
 
 export default function OrderDetailsScreen() {
@@ -15,12 +14,12 @@ export default function OrderDetailsScreen() {
   const [data,setData]=useState([]);
 
   const handleSelectedData =(data:any)=>{
-    setSelectedData(data)
+    setSelectedData(data.itemsList)
   }
 
   const fetchData=async ()=>{
     try {
-        const res=await api.get("/api/v1/coffeShop/payment/getPayment");
+        const res = await api.get("/api/v1/coffeShop/payment/getPayment");
         setData(res.data)
     } catch (error){
 
@@ -34,7 +33,7 @@ export default function OrderDetailsScreen() {
   return (
     <div className="w-screen h-[90vh] flex flex-row justify-evenly items-center">
       <PlaseOrderDetails rows={data} selectedRow={handleSelectedData}/>
-      <UserOrder data={selectedData}/>
+      <ItemsOfOrders data={selectedData}/>
     </div>
   )
 }

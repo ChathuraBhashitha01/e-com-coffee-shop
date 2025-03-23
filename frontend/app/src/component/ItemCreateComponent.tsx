@@ -1,6 +1,4 @@
-import React, {  useState } from "react";
-import axios from "axios";
-import { Form ,Card ,Table ,Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
 
 interface Item {
     code: string;
@@ -13,29 +11,31 @@ interface Item {
     preview: string;
 }
 
-interface Props{
-    saveDetails: (row: any) => void;
-    updateDetails: (row: any) => void;
+interface Props {
+    itemDetails: any;
+    saveDetails: (row: Item) => void;
+    updateDetails: (row: Item) => void;
 }
 
-export default function ItemCreateForm ({saveDetails,updateDetails}:Props) {
-    // const token = localStorage.getItem("token");
-    const api = axios.create({ baseURL: `http://localhost:3000` });
-    
+export default function ItemCreateForm({ itemDetails, saveDetails, updateDetails }: Props) {
+
     const [formData, setFormData] = useState<Item>({
         code: "",
         name: "",
         description: "",
         category: "",
-        quantity: '',
-        price: '',
+        quantity: "",
+        price: "",
         picture: "",
         preview: "",
     });
 
-    const handleInputOnChange = (event: { target: {name:any, value: any } }) => {
+    const handleInputOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: name === "price" || name === "quantity" ? Number(value) : value,
+        }));
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,19 +46,16 @@ export default function ItemCreateForm ({saveDetails,updateDetails}:Props) {
                 const base64String = reader.result as string;
                 setFormData((prevState) => ({
                     ...prevState,
-                    picture: base64String
-                }));
-                setFormData((prevState) => ({
-                    ...prevState,
-                    preview: base64String
+                    picture: base64String,
+                    preview: base64String,
                 }));
             };
             reader.readAsDataURL(file);
         }
     };
 
-    const handleOnClearAll= ()=>{
-        setFormData(() => ({
+    const handleOnClearAll = () => {
+        setFormData({
             code: "",
             name: "",
             description: "",
@@ -67,42 +64,57 @@ export default function ItemCreateForm ({saveDetails,updateDetails}:Props) {
             price: "",
             picture: "",
             preview: "",
-        }));
-    }
-   
-    const handleSaveItem =()=>{
-        saveDetails(formData)
-    }
+        });
+    };
 
-    const handleUpdateItem =()=>{
-        updateDetails(formData)
-    }
+    const handleSaveItem = () => {
+        saveDetails(formData);
+    };
+
+    const handleUpdateItem = () => {
+        updateDetails(formData);
+    };
+
+    useEffect (()=>{
+        if(itemDetails){
+            setFormData({
+                code: itemDetails?.code,
+                name: itemDetails?.name,
+                description: itemDetails?.description,
+                category: itemDetails?.category,
+                quantity: itemDetails?.quantity,
+                price: itemDetails?.price,
+                picture: itemDetails?.picture,
+                preview: itemDetails?.picture,
+            })
+        }
+    },[itemDetails])
 
     return (
-      <Card className="w-[45vw] min-h-[80vh] flex flex-col justify-center items-center bg-white shadow-xl rounded-lg">
-        <div className="w-[70%] h-[95%]">
-            <label className="text-[20px] font-serif font-semibold mb-4">Item Details</label>
-            
-            <input type="text" placeholder="Code" name="code" value={formData.code} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-            <input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-            <input type="number" placeholder="Price" name="price" value={formData.price} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-            <input type="number" placeholder="Quantity" name="quantity" value={formData.quantity} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-            <select name="category" value={formData.category} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded">
-                <option value="">Select Category</option>
-                <option value="coffee">Coffee</option>
-            </select>
-            <textarea placeholder="Description" name="description" value={formData.description} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" rows={3}></textarea>
-            <input type="file" onChange={handleFileChange} className="mb-3" />
-            <div className="max-w-[100%] max-h-[20%]">
-                {formData.preview && <img src={formData.preview} alt="Preview" className=" w-auto h-[100%]" />}
-            </div>
+        <div className="w-[45vw] min-h-[80vh] flex flex-col justify-center items-center bg-white shadow-xl rounded-lg p-6">
+            <div className="w-[70%] h-[95%]">
+                <label className="text-[20px] font-serif font-semibold mb-4">Item Details</label>
+                
+                <input type="text" placeholder="Code" name="code" value={formData.code} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <input type="number" placeholder="Price" name="price" value={formData.price} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <input type="number" placeholder="Quantity" name="quantity" value={formData.quantity} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <select name="category" value={formData.category} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded">
+                    <option value="">Select Category</option>
+                    <option value="coffee">Coffee</option>
+                </select>
+                <textarea placeholder="Description" name="description" value={formData.description} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" rows={3}></textarea>
+                <input type="file" onChange={handleFileChange} className="mb-3" />
+                <div className="max-w-[100%] max-h-[20%]">
+                    {formData.preview && <img src={formData.preview} alt="Preview" className="w-auto h-[100%]" />}
+                </div>
 
-            <div className=" w-[100%] h-[20%] flex flex-row justify-center items-center">
-                <button onClick={handleSaveItem} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
-                <button onClick={handleUpdateItem} className="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
-                <button onClick={handleOnClearAll} className="px-4 py-2 bg-blue-500 text-white rounded">Clear</button>
+                <div className="w-[100%] h-[20%] flex flex-row justify-center items-center">
+                    <button onClick={handleSaveItem} className="px-4 py-2 bg-blue-500 text-white rounded mx-2">Save</button>
+                    <button onClick={handleUpdateItem} className="px-4 py-2 bg-blue-500 text-white rounded mx-2">Update</button>
+                    <button onClick={handleOnClearAll} className="px-4 py-2 bg-blue-500 text-white rounded mx-2">Clear</button>
+                </div>
             </div>
         </div>
-    </Card>
     );
-};
+}
