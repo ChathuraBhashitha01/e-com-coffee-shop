@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface Item {
     code: string;
@@ -12,24 +11,31 @@ interface Item {
     preview: string;
 }
 
-export default function ItemCreateForm () {
-    // const token = localStorage.getItem("token");
-    const api = axios.create({ baseURL: `http://localhost:3000` });
-    
+interface Props {
+    itemDetails: any;
+    saveDetails: (row: Item) => void;
+    updateDetails: (row: Item) => void;
+}
+
+export default function ItemCreateForm({ itemDetails, saveDetails, updateDetails }: Props) {
+
     const [formData, setFormData] = useState<Item>({
         code: "",
         name: "",
         description: "",
         category: "",
-        quantity: 0,
-        price: 0,
+        quantity: "",
+        price: "",
         picture: "",
         preview: "",
     });
 
-    const handleInputOnChange = (event: { target: {name:any, value: any } }) => {
+    const handleInputOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: name === "price" || name === "quantity" ? Number(value) : value,
+        }));
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,21 +46,16 @@ export default function ItemCreateForm () {
                 const base64String = reader.result as string;
                 setFormData((prevState) => ({
                     ...prevState,
-                    picture: base64String
-                }));
-                setFormData((prevState) => ({
-                    ...prevState,
-                    preview: base64String
+                    picture: base64String,
+                    preview: base64String,
                 }));
             };
             reader.readAsDataURL(file);
         }
     };
 
-    const handleOnClearAll= ()=>{
-
-
-        setFormData(() => ({
+    const handleOnClearAll = () => {
+        setFormData({
             code: "",
             name: "",
             description: "",
@@ -63,103 +64,57 @@ export default function ItemCreateForm () {
             price: "",
             picture: "",
             preview: "",
-        }));
-    }
-    const handleOnSave=async ()=>{
-        try {
-            api.post('/api/v1/coffeShop/item/',{
-                "code":formData.code,
-                "name": formData.name,
-                "description": formData.description,
-                "category": formData.category,
-                "quantity": formData.quantity,
-                "price": formData.price,
-                "picture": formData.picture
-            
-            }).then((res: {data: any}) => {
-                const response = res.data;
-                alert(response);
-                console.log(response);
-            }).catch((error: any) => {
-                console.error('Axios Error:', error);
-            });
-        }catch (error){
-            console.error('Error:', error);
+        });
+    };
+
+    const handleSaveItem = () => {
+        saveDetails(formData);
+    };
+
+    const handleUpdateItem = () => {
+        updateDetails(formData);
+    };
+
+    useEffect (()=>{
+        if(itemDetails){
+            setFormData({
+                code: itemDetails?.code,
+                name: itemDetails?.name,
+                description: itemDetails?.description,
+                category: itemDetails?.category,
+                quantity: itemDetails?.quantity,
+                price: itemDetails?.price,
+                picture: itemDetails?.picture,
+                preview: itemDetails?.picture,
+            })
         }
-    }
-
-    const handleOnSearch=async ()=>{
-        try {
-            api.get('/api/v1/coffeShop/item/find/'+formData.code).then((res:{data:any})=>{
-                const jasonData=res.data;
-                setFormData(jasonData);
-
-                setFormData((prevState) => ({
-                    ...prevState,
-                    preview: jasonData.picture
-                }));
-            });
-
-        }catch (error){
-            console.error('Error:', error);
-        }
-        
-    }
-
-    const handleOnUpdate = async ()=>{
-    
-        try {
-            api.put('/api/v1/coffeShop/item/'+formData.code, {
-                "code":formData.code,
-                "name": formData.name,
-                "description": formData.description,
-                "category": formData.category,
-                "quantity": formData.quantity,
-                "price": formData.price,
-                "picture": formData.picture
-               }).then((res: { data: any }) => {
-                const response = res.data;
-                alert(response);
-                console.log(response);
-            }).catch((error: any) => {
-                console.error('Axios Error:', error);
-            });
-        } catch (error) {
-            console.error('Error:', error);
-        }
-      
-    }
-
-    const handleOnDelete = async ()=>{
-        try {
-            api.delete('/api/v1/coffeShop/item/'+formData.code).then((res)=>{});
-
-        }catch (error){
-            console.error('Error:', error);
-        }
-    }
+    },[itemDetails])
 
     return (
-      <div className="w-[600px] min-h-[700px] p-5 border rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Item Details</h2>
-        <input type="text" placeholder="Code" name="code" value={formData.code} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <input type="number" placeholder="Price" name="price" value={formData.price} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <input type="number" placeholder="Quantity" name="quantity" value={formData.quantity} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
-        <select name="category" value={formData.category} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded">
-            <option value="">Select Category</option>
-            <option value="coffee">Coffee</option>
-        </select>
-        <textarea placeholder="Description" name="description" value={formData.description} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" rows={3}></textarea>
-        <input type="file" onChange={handleFileChange} className="mb-3" />
-        {formData.preview && <img src={formData.preview} alt="Preview" className="w-20 h-auto" />}
-        <div className="mt-3 space-x-2">
-            <button onClick={handleOnSave} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
-            <button onClick={handleOnUpdate} className="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
-            <button onClick={handleOnDelete} className="px-4 py-2 bg-blue-500 text-white rounded">Delete</button>
-            <button onClick={handleOnSearch} className="px-4 py-2 bg-blue-500 text-white rounded">Search</button>
-            <button onClick={handleOnClearAll} className="px-4 py-2 bg-blue-500 text-white rounded">Clear</button>
+        <div className="w-[45vw] min-h-[80vh] flex flex-col justify-center items-center bg-white shadow-xl rounded-lg p-6">
+            <div className="w-[70%] h-[95%]">
+                <label className="text-[20px] font-serif font-semibold mb-4">Item Details</label>
+                
+                <input type="text" placeholder="Code" name="code" value={formData.code} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <input type="number" placeholder="Price" name="price" value={formData.price} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <input type="number" placeholder="Quantity" name="quantity" value={formData.quantity} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" />
+                <select name="category" value={formData.category} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded">
+                    <option value="">Select Category</option>
+                    <option value="coffee">Coffee</option>
+                </select>
+                <textarea placeholder="Description" name="description" value={formData.description} onChange={handleInputOnChange} className="w-full p-2 mb-3 border rounded" rows={3}></textarea>
+                <input type="file" onChange={handleFileChange} className="mb-3" />
+                <div className="max-w-[100%] max-h-[20%]">
+                    {formData.preview && <img src={formData.preview} alt="Preview" className="w-auto h-[100%]" />}
+                </div>
+
+                <div className="w-[100%] h-[20%] flex flex-row justify-center items-center">
+                    <button onClick={handleSaveItem} className="px-4 py-2 bg-blue-500 text-white rounded mx-2">Save</button>
+                    <button onClick={handleUpdateItem} className="px-4 py-2 bg-blue-500 text-white rounded mx-2">Update</button>
+                    <button onClick={handleOnClearAll} className="px-4 py-2 bg-blue-500 text-white rounded mx-2">Clear</button>
+                </div>
+            </div>
         </div>
-    </div>
     );
-};
+}

@@ -1,10 +1,10 @@
 import {useState} from "react";
-import icon from "../assets/item_cover.jpg";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Logo from "../assets/login_cover.jpg";
 
 interface loginState{
-    email:string,
+    username:string,
     password:string
 }
 
@@ -13,59 +13,59 @@ export default function Login() {
     const navigate = useNavigate();
 
     const api=axios.create({
-        baseURL:`http://localhost:4000`
+        baseURL:`http://localhost:3000`
     })
 
-    const [data,setData]=useState<loginState>({
-        email:'',
+    const [formData,setFormData]=useState<loginState>({
+        username:'',
         password:''
     });
 
-    const handleLogin=async()=>{
+    const handleLogin = async (event: React.FormEvent) => {
+        event.preventDefault(); // Prevent page reload
+    
         try {
-            // await api.get('/api/v1/user/login?email='+data.email+'&password='+data.password).then((res: {data: any}) => {
-            //     const response = res.data;
-            //    if(response.role){
-            //        localStorage.setItem('token', response.token);
-            //        navigate('/user');
-            //    }
-            // });
-            navigate('/admin/');
-        }catch (error){
-            console.error('Error:', error);
+        //   const response = await api.get(`/api/v1/coffeShop/user/login/${formData.username}/${formData.password}`);
+        
+        //   if (response.data.role === "ADMIN") {
+        //     localStorage.setItem("token", response.data.token);
+        //     navigate("/admin");
+        //   } else if (response.data.role === "USER") {
+        //     localStorage.setItem("token", response.data.token);
+        //     navigate("/user");
+        //   }
+        navigate("/user");
+        } catch (error) {
+          console.error("Error:", error);
         }
+      };
 
-    }
+    const handleSignUp=(()=>{
+        navigate("/signup")
+    })
 
     const handleInputOnChange=(event: { target: { name: any; value: any; }; })=>{
         const {name,value}=event.target;
 
-        setData((prevState) => ({
+        setFormData((prevState) => ({
             ...prevState,
             [name]: value
         }));
     }
 
     return (
-        <div className="h-[100vh] w-[100vw] overflow-y-hidden overflow-x-hidden">
-            <div className="h-[100vh] w-[130vw] transition-transform duration-1000 -translate-x-[30vw]">
-                <div className="w-[100vw] h-[100%] inline-block">
-                    <img src={icon} alt="" className="w-[100%] h-[100%]"/>
-                </div>
-                <div className="w-[30vw] h-[100%] relative inline-block border-black border-[1px]">
-                    <div className="w-[100%] h-[30vh] mt-4 mb-4 pl-9 pr-9 absolute bottom-0 top-[25vh] right-0 mx-auto ">
-                        <h2 className="text-3xl text-center font-semibold my-7">Sign In</h2>
-                        <form className="flex flex-col gap-4">
+        <div className="h-screen w-screen flex flex-col justify-center items-center  bg-opacity-50 z-50" style={{ backgroundImage: `url(${Logo})` }}>
+            <div className="w-[30%] min-h-[50%] ml-10 flex flex-col justify-evenly items-center rounded-2xl shadow-lg" >
+                <h2 className="text-white text-center font-serif font-bold">Sign In</h2>
+                <form className="w-[90%] min-h-[70%] flex flex-col gap-3">
 
-                            <input type="email" value={data.email} onChange={handleInputOnChange} name='email'  placeholder="email" className="border p-3 rounded-lg" id='email'/>
-                            <input type="password" value={data.password} onChange={handleInputOnChange} name='password' placeholder="password" className="border p-3 rounded-lg"
-                                   id='password'/>
+                    <input type="text" value={formData.username} onChange={handleInputOnChange} name='username'  placeholder="username" className=" w-[90%] h-[40px] text-white border-1 border-white rounded-xs" id='username'/>
+                    <input type="password" value={formData.password} onChange={handleInputOnChange} name='password' placeholder="password" className=" w-[90%] h-[40px] border-1 border-white  text-white rounded-xs"
+                            id='password'/>
 
-                            <button onClick={handleLogin} className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">Sign In</button>
-
-                        </form>
-                    </div>
-                </div>
+                    <button onClick={handleLogin} className="bg-slate-700  mt-10  w-[90%] h-[40px] text-white font-serif shadow-lg rounded-lg">SIGN IN</button>
+                    <button onClick={handleSignUp} className="bg-slate-700  w-[90%] h-[40px] text-white font-serif shadow-lg rounded-lg">SIGN UP</button>
+                </form>
             </div>
         </div>
     );

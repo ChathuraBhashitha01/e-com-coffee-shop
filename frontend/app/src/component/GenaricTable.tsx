@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import {Table, Form ,Button ,Card  } from "react-bootstrap";
+import React, { useEffect } from 'react'
+import {Table ,Button ,Card  } from "react-bootstrap";
 
 interface ItemRow {
   code: string;
@@ -20,12 +20,6 @@ interface Props {
 export default function OrderTable({rows,searchName,searchCategory,rowsPerPage,selectedRow}: Props) {
 
   const [page, setPage] = React.useState(0);
-//   const [itemData ,setItemData] = React.useState({
-//   code: "",
-//   name: "",
-//   price: 0,
-//   })
-
   const [filteredRows, setFilteredRows] = React.useState(rows);
 
   const emptyRows = Math.max(
@@ -34,13 +28,6 @@ export default function OrderTable({rows,searchName,searchCategory,rowsPerPage,s
   );
     
   const handleRowClick = (row: any) => {
-    // setItemData((prev) => ({
-    //   ...prev, 
-    //   code: row.code,
-    //   name: row.name,
-    //   price: row.price
-    // }));
-
     if(selectedRow){
       selectedRow(row)
     }
@@ -76,7 +63,7 @@ export default function OrderTable({rows,searchName,searchCategory,rowsPerPage,s
   }, [searchName,searchCategory,rows]);
 
   return (
-    <div className=" w-[100%] min-h-[100%] flex flex-col bg-white shadow-xl rounded-lg">
+    <div className=" w-[90%] min-h-[80%] flex flex-col bg-white shadow-xl rounded-lg">
       
       <div className=" w-[100%] h-[92%] bg-white shadow-xl rounded-lg">
         <Table hover borderless  responsive="sm" className="border-collapse">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Table, Form ,Button ,Card  } from "react-bootstrap";
+import { Form ,Button ,Card  } from "react-bootstrap";
 import GenaricTable from './GenaricTable';
 
 interface ItemRow {
