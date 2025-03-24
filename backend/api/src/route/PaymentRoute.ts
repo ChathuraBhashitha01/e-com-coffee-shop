@@ -1,12 +1,12 @@
 import express from 'express';
 import paymentRoutes from '../controller/PaymentController';
-import { protect } from '../middleware/AuthMiddleware';
+import { authenticateToken } from "../middleware/AuthMiddleware";
 
 const router = express.Router();
 
-router.post('/', paymentRoutes.createPayment);
-router.get('/getTotal', paymentRoutes.findTotal);
-router.get('/getPayment', paymentRoutes.findPayment);
-router.get('/:username', paymentRoutes.findPaymentByUserName);
+router.post('/',authenticateToken, paymentRoutes.createPayment);
+router.get('/getTotal',authenticateToken, paymentRoutes.findTotal);
+router.get('/getPayment',authenticateToken, paymentRoutes.findPayment);
+router.get('/:username',authenticateToken, paymentRoutes.findPaymentByUserName);
 
 export default router;

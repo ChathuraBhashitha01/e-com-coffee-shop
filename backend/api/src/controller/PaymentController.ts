@@ -11,7 +11,7 @@ const PaymentController = {
         
             try {
                 const { paymentID, userName, date, total, itemsList } = req.body;
-        
+                console.log("backend =",req.body)
                 const payment = new Payment({ paymentID, userName, date, total, itemsList });
                 await payment.save({ session });
                 
@@ -68,11 +68,11 @@ const PaymentController = {
             const currentDate = new Date().toISOString().split('T')[0];
             const payments = await Payment.find();
 
-            for (const payment of payments) {
-                if (payment.date.split('T')[0] === currentDate) {
-                    total += payment.total;
-                }
-            }
+            // for (const payment of payments) {
+            //     if (payment.date.split('T')[0] === currentDate) {
+            //         total += payment.total;
+            //     }
+            // }
 
             res.status(200).json(total);
         } catch (error) {

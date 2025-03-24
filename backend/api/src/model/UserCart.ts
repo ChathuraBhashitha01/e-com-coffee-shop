@@ -1,38 +1,47 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-interface Item {
-    code: string;
+interface UserCart extends Document {
+    userCartID:string;
+    userName: string;
+    code:string;
     price: number;
     quantity: number;
     totalOfItem: number;
 }
 
-interface UserCart extends Document {
-    userName: string;
-    itemList: Item[];
-}
-
-const UserCartchema: Schema = new Schema(
+const UserCartSchema: Schema = new Schema(
     {
-        userName: {
-            required: true,
-            type: String,
-            unique: true,
-            index: true
-        },
-
-        itemsList: [
-            {
-                code: { required: true, type: String,},
-                quantity: {required: true,type: Number},
-                price: {required: true,type: Number},
-                totalOfItem: {required: true,type: Number}
-            }
-        ]
+        userCartID: { 
+                required: true,  
+                type: String,   
+                unique: true,
+                index: true
+            },
+        userName: { 
+                required: true,  
+                type: String
+            },
+        code: { 
+                required: true, 
+                type: String,
+            },
+        quantity: {
+                    required: true,
+                    type: Number
+                },
+        price: {   
+                required: true,
+                type: Number
+            },
+        totalOfItem: {
+                required: true,
+                type: Number
+            },
+        
     },
     { versionKey: false }
 );
 
-const UserCart = mongoose.model<UserCart>('userCart', UserCartchema);
+const UserCart = mongoose.model<UserCart>('userCart', UserCartSchema);
 
 export default UserCart;

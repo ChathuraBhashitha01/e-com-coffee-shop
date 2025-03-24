@@ -1,39 +1,22 @@
-import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
-import User from '../model/User';
-import asyncHandler from 'express-async-handler';
+import { Request, Response, NextFunction } from "express";
+import { verifyAccessToken } from "../util/jwtUtils";
 
-declare module 'express-serve-static-core' {
-    interface Request {
-        user?: any;
-    }
+export interface AuthRequest extends Request {
+  user?: { userName: string};
 }
 
-const protect = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    let token: string | undefined;
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
+  const token:any = req.header("Authorization")?.split(" ")[1];
 
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        try {
-            token = req.headers.authorization.split(' ')[1];
+  if (!token) {
+    res.status(403).json({ message: "Access Denied" });
+  } 
 
-            const decoded = jwt.verify(
-                token,
-                process.env.JWT_SECRET || 'default_secret'
-            ) as { id: string };
+  const decoded = verifyAccessToken(token);
+  if (!decoded) {
+    res.status(401).json({ message: "Invalid Token" });
+  } 
 
-            req.user = await User.findById(decoded.id).select('-password');
-
-            next();
-        } catch (error) {
-            res.status(401);
-            throw new Error('Not authorized');
-        }
-    }
-
-    if (!token) {
-        res.status(401);
-        throw new Error('Not authorized, No Token');
-    }
-});
-
-export { protect };
+  // req.user = decoded;
+  next();
+};
