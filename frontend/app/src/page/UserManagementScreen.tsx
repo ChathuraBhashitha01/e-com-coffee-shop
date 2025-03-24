@@ -4,7 +4,7 @@ import UserTable from '../component/UserTable';
 import axios from 'axios';
 
 export default function UserManagementScreen() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const api = axios.create({
         baseURL:`http://localhost:3000`
@@ -16,7 +16,11 @@ export default function UserManagementScreen() {
 
     const selectedOrders =async (data:any)=>{
         try {
-            const res = await api.get(`/api/v1/coffeShop/payment/${data.userName}`);
+            const res = await api.get(`/api/v1/coffeShop/payment/${data.userName}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
             setUserOrder(res.data)
         } catch (error){
 
@@ -25,7 +29,11 @@ export default function UserManagementScreen() {
 
     const fetchData=async ()=>{
         try {
-            const res = await api.get(`/api/v1/coffeShop/user/`);
+            const res = await api.get(`/api/v1/coffeShop/user/`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
             setData(res.data)
         } catch (error){
 
@@ -34,7 +42,11 @@ export default function UserManagementScreen() {
 
     const handleOnDelete = async (username:string)=>{
         try {
-            await api.delete(`/api/v1/coffeShop/user/${username}`);
+            await api.delete(`/api/v1/coffeShop/user/${username}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
             fetchData()
         }catch (error){
             console.error('Error:', error);

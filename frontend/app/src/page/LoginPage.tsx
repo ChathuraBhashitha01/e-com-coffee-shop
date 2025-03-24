@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Logo from "../assets/login_cover.jpg";
 
 interface loginState{
-    username:string,
+    userName:string,
     password:string
 }
 
@@ -17,7 +17,7 @@ export default function Login() {
     })
 
     const [formData,setFormData]=useState<loginState>({
-        username:'',
+        userName:'',
         password:''
     });
 
@@ -25,16 +25,18 @@ export default function Login() {
         event.preventDefault(); // Prevent page reload
     
         try {
-        //   const response = await api.get(`/api/v1/coffeShop/user/login/${formData.username}/${formData.password}`);
+          const response = await api.post("/api/v1/coffeShop/auth/login",{
+             "userName":formData.userName,
+            "password":formData.password
+          });
         
-        //   if (response.data.role === "ADMIN") {
-        //     localStorage.setItem("token", response.data.token);
-        //     navigate("/admin");
-        //   } else if (response.data.role === "USER") {
-        //     localStorage.setItem("token", response.data.token);
-        //     navigate("/user");
-        //   }
-        navigate("/user");
+          if (response.data.role === "ADMIN") {
+            sessionStorage.setItem("token", response.data.accessToken);
+            navigate("/admin");
+          } else if (response.data.role === "USER") {
+            sessionStorage.setItem("token", response.data.accessToken);
+            navigate("/user");
+          }
         } catch (error) {
           console.error("Error:", error);
         }
@@ -59,7 +61,7 @@ export default function Login() {
                 <h2 className="text-white text-center font-serif font-bold">Sign In</h2>
                 <form className="w-[90%] min-h-[70%] flex flex-col gap-3">
 
-                    <input type="text" value={formData.username} onChange={handleInputOnChange} name='username'  placeholder="username" className=" w-[90%] h-[40px] text-white border-1 border-white rounded-xs" id='username'/>
+                    <input type="text" value={formData.userName} onChange={handleInputOnChange} name='userName'  placeholder="username" className=" w-[90%] h-[40px] text-white border-1 border-white rounded-xs" id='userName'/>
                     <input type="password" value={formData.password} onChange={handleInputOnChange} name='password' placeholder="password" className=" w-[90%] h-[40px] border-1 border-white  text-white rounded-xs"
                             id='password'/>
 

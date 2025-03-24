@@ -4,7 +4,7 @@ import ItemCreateComponent from '../component/ItemCreateComponent';
 import axios from "axios";
 
 export default function ItemControllerScreen() {
-    // const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const api = axios.create({ baseURL: `http://localhost:3000` });
 
     const [item , setItems] = useState<any[]>([]);
@@ -16,7 +16,11 @@ export default function ItemControllerScreen() {
 
     const handleGetItems=async ()=>{
         try {
-            const res = await api.get(`/api/v1/coffeShop/item/`,);
+            const res = await api.get(`/api/v1/coffeShop/item/`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
             setItems(res.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -34,6 +38,10 @@ export default function ItemControllerScreen() {
                 "price": formData.price,
                 "picture": formData.picture
             
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
             }).then((res: {data: any}) => {
                 const response = res.data;
                 alert(response);
@@ -57,7 +65,11 @@ export default function ItemControllerScreen() {
                 "quantity": formData.quantity,
                 "price": formData.price,
                 "picture": formData.picture
-               }).then((res: { data: any }) => {
+               },{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }).then((res: { data: any }) => {
                 const response = res.data;
                 alert(response);
                 handleGetItems()
@@ -72,7 +84,11 @@ export default function ItemControllerScreen() {
 
     const handleOnDelete = async (code:string)=>{
         try {
-            await api.delete(`/api/v1/coffeShop/item/${code}`);
+            await api.delete(`/api/v1/coffeShop/item/${code}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
             handleGetItems()
         }catch (error){
             console.error('Error:', error);
