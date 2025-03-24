@@ -10,7 +10,7 @@ interface Item {
 interface Payment extends Document {
     paymentID: string;
     userName: string;
-    date: string;
+    date: Date;
     total: number;
     itemsList: Item[];
 }
@@ -29,7 +29,7 @@ const PaymentSchema: Schema = new Schema(
         },
         date: {
             required: true,
-            type: String
+            type: Date
         },
         total: {
             required: true,

@@ -1,13 +1,11 @@
 import express from 'express';
 import User from '../controller/UserController';
-import { protect } from '../middleware/AuthMiddleware';
+import { authenticateToken } from "../middleware/AuthMiddleware";
 
 const router = express.Router();
 
-router.get('/', User.getAllUser);
-router.delete('/:username', User.deleteUser);
-router.post('/signin',  User.createUser);
-router.get('/login/:username/:password', User.loginUser);
-router.get('/getUser/:username', User.getUser);
+router.get('/',authenticateToken,User.getAllUser);
+router.delete('/:username',authenticateToken, User.deleteUser);
+router.get('/getUser/:username',authenticateToken, User.getUser);
 
 export default router;

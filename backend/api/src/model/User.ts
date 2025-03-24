@@ -11,7 +11,9 @@ const userSchema: Schema = new Schema(
     {
         userName: {
             type: String,
-            required: true
+            required: true,
+            unique: true,
+            index: true
         },
         name: {
             type: String,
