@@ -2,43 +2,45 @@ import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import Payment from '../model/Payment';
 import Item from '../model/Item';
-import { error } from 'console';
 
 const PaymentController = {
     createPayment: async (req: Request, res: Response, next: NextFunction) => {
         try {
             const session = await mongoose.startSession();
             session.startTransaction();
+        
             try {
-                const { paymentID, date, total, itemsList } = req.body;
-
-                const payment = new Payment({ paymentID, date, total, itemsList });
+                const { paymentID, userName, date, total, itemsList } = req.body;
+        
+                const payment = new Payment({ paymentID, userName, date, total, itemsList });
                 await payment.save({ session });
-
+                
                 for (const item of itemsList) {
-                    const isItemExist = await Item.findOne({code: itemsList.code})
-                    if(!isItemExist){
-                        const error: any = new Error("Item not found"); 
-                        error.status = 404;
-                        throw error;
+                    const isItemExist = await Item.findOne({ code: item.code }).session(session);
+        
+                    if (!isItemExist) {
+                        throw new Error(`Item with code ${item.code} not found`);
                     }
+        
                     await Item.updateOne(
                         { code: item.code },
-                        { $inc: { qty: -item.itemCount } },
+                        { $inc: { quantity: -item.itemCount } },
                         { session }
                     );
                 }
 
                 await session.commitTransaction();
-                await session.endSession();
-            }catch (error){
+                res.status(201).json();  
+            } catch (error) {
                 await session.abortTransaction();
-                await session.endSession();
-                res.status(400).json({error: 'Invalied input provided'})
+                console.log(error)
+                res.status(400).json({ error: "Invalid input provided"});  
+            } finally {
+                await session.endSession();   
             }
         } catch (error) {
             next(error);
-        }
+        }        
     },
 
     findPayment: async (req: Request, res: Response, next: NextFunction) => {
@@ -46,8 +48,17 @@ const PaymentController = {
             const payments = await Payment.find();
             res.status(200).json(payments);
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Something went wrong' });
+          next(error)
+        }
+    },
+
+    findPaymentByUserName: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user =req.params.username;
+            const payments = await Payment.find({userName:user});
+            res.status(200).json(payments);
+        } catch (error) {
+            next(error)
         }
     },
 
@@ -65,8 +76,7 @@ const PaymentController = {
 
             res.status(200).json(total);
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Something went wrong' });
+            next(error)
         }
     }
 };

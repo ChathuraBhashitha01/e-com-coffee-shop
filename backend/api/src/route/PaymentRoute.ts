@@ -4,8 +4,9 @@ import { protect } from '../middleware/AuthMiddleware';
 
 const router = express.Router();
 
-router.post('/placeOrder',protect, paymentRoutes.createPayment);
-router.get('/getTotal',protect, paymentRoutes.findTotal);
-router.get('/getPayment',protect, paymentRoutes.findPayment);
+router.post('/', paymentRoutes.createPayment);
+router.get('/getTotal', paymentRoutes.findTotal);
+router.get('/getPayment', paymentRoutes.findPayment);
+router.get('/:username', paymentRoutes.findPaymentByUserName);
 
 export default router;
