@@ -29,20 +29,17 @@ export default function Signup() {
 
     const handleSignUp=async()=>{
         try {
-            const response = await api.post('/api/v1/coffeShop/user/signin',{
-                "username" :formData.username,
+            const response = await api.post('/api/v1/coffeShop/auth/signin',{
+                "userName" :formData.username,
                 "name": formData.name,
                 "role": "USER",
                 "password": formData.password
             })
 
-            if (response.data.role === "ADMIN") {
-                localStorage.setItem("token", response.data.token);
-                navigate("/admin");
-              } else if (response.data.role === "USER") {
-                localStorage.setItem("token", response.data.token);
+            if (response.data.role === "USER") {
+                sessionStorage.setItem("token", response.data.accessToken);
                 navigate("/user");
-              }
+            }
         }catch (error){
             console.error('Error:', error);
         }

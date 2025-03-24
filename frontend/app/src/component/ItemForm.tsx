@@ -26,6 +26,7 @@ export default function ItemForm({ Items ,selectedItem }: Props) {
     }
   };
 
+
   const handleChangeSearchCategory = (category: string) => {
     setSearchCategory(category);
   };
@@ -93,10 +94,10 @@ export default function ItemForm({ Items ,selectedItem }: Props) {
         style={{ backgroundImage: `url(${ItemCoverImage})` }}
       >
         <div className="min-w-[95%] max-h-[75%] flex justify-center items-center">
-          <div className="w-[90%] h-full mt-10 mb-10 grid grid-cols-5 gap-4 ">
+          <div className="w-[90%] h-full mt-10 mb-10 grid grid-cols-4 gap-4 ">
             {filteredItems?.map((item, index) => (
-              <div key={index} onClick={() => handleItemClick(item)}className="p-5 rounded-lg shadow-md">
-                <Item name={item.name} description={"coiownhcw cnhoiwnbd nbcnwoinh incid"} price={item.price} />
+              <div key={index} className="p-5 rounded-lg shadow-md">
+                <Item data={item} selectedItem={handleItemClick}/>
               </div>
             ))}
           </div>

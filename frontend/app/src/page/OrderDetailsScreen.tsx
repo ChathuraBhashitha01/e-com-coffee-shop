@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import PlaseOrderDetails from "../component/PlaceOrderDetails" 
 import ItemsOfOrders from '../component/ItemsOfOrders';
 import axios from "axios";
+import { parseJwt } from "../utils/UserDetails";
 
 export default function OrderDetailsScreen() {
-  const token = localStorage.getItem('token');
+  const token:any = sessionStorage.getItem('token');
+  const userDetails = parseJwt(token);
+  const username = userDetails.userName
 
   const api = axios.create({
       baseURL:`http://localhost:3000`
@@ -19,7 +22,11 @@ export default function OrderDetailsScreen() {
 
   const fetchData=async ()=>{
     try {
-        const res = await api.get("/api/v1/coffeShop/payment/getPayment");
+        const res = await api.get(`/api/v1/coffeShop/payment/${username}`,{
+          headers: {
+              Authorization: `Bearer ${token}`,
+          }
+      });
         setData(res.data)
     } catch (error){
 
